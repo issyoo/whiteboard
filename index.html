@@ -1,0 +1,159 @@
+<html>
+
+ <head>
+
+ <meta content="width=device-width, initial-scale=1" name="viewport" />
+
+  <style>
+
+   svg{
+
+    height:50%;
+
+    width:100%;
+
+    border:solid;
+
+    background:#fff;
+
+   }
+
+   #inp{
+
+     positive: absolute;
+
+     bottom:0;
+
+     
+
+   }
+
+   #code{
+
+     height: 40%;
+
+     width: 100%;
+
+   }
+
+  </style>
+
+ </head>
+
+ <body>
+
+ 
+
+  <svg ontouchstart="ts(event), tm(event)"
+
+       ontouchmove="tm(event)" id='ink'> </svg>
+
+        <div id="inp">
+
+ <input type='color' id="stroke">
+
+  <input type='color' id="fill" onchange="fill()"></div>
+
+  <input type='range' max="20" value="2" id="width">
+
+  </div>
+
+  <button onclick='clearBoard()'>Clear</button>
+
+  <textarea id="code"></textarea>
+
+  <script>
+
+  document.querySelector('#fill').value = '#fffff'
+
+   var x , y , dval;
+
+   
+
+   function ts(e){
+
+   dval ="";
+
+   var svg = document.getElementsByTagName('svg')[0];
+
+   var ink = document.createElementNS("http://www.w3.org/2000/svg","path");
+
+   ink.style.strokeWidth = document.querySelector('#width').value + 'px';
+
+   ink.style.stroke = document.querySelector('#stroke').value;
+
+   ink.style.fill = "rgb(0,0,0,0)";
+
+   svg.appendChild(ink);
+
+    x = e.touches[0].clientX;
+
+    y = e.touches[0].clientY;
+
+    dval+=" M"+x+" "+y+"L";
+
+   }
+
+   
+
+   function tm(e){
+
+   
+
+   var path = document.getElementsByTagName('path');
+
+   var ink = path[path.length - 1];
+
+    mx = e.touches[0].clientX;
+
+    my = e.touches[0].clientY;
+
+    dval+=mx+" "+my+" ";
+
+    ink.setAttribute("d",dval);
+
+    e.preventDefault();
+
+    getCodee(event);
+
+   }
+
+  function clearBoard(){
+
+     document.getElementById('code').value = "";
+
+     document.getElementsByTagName('svg')[0].innerHTML = '';
+
+     console.log("cleard!")
+
+  }
+
+  function fill(){
+
+    var path = document.getElementsByTagName('path');
+
+   var ink = path[path.length - 1];
+
+   ink.style.fill = document.querySelector('#fill').value;
+
+  }
+
+  function getCodee(e){
+
+    var path = document.getElementsByTagName('path');
+
+   var svg = path[path.length - 1];
+
+     var code = document.getElementById('code');
+
+     code.value = e.target.innerHTML;
+
+     code.scrollTop = code.scrollHeight;
+
+  }
+
+  </script>
+
+ </body>
+
+</html>
