@@ -1,0 +1,115 @@
+<html>
+ <head>
+ <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <style>
+   svg{
+    height:50%;
+    width:100%;
+    border:solid;
+    background:#fff;
+   }
+   #inp{
+     positive: absolute;
+     bottom:0;
+   }
+   #code{
+     height: 30%;
+     width: 100%;
+   }
+    button{
+     padding:7px;
+     border: 1px solid rgb(200,205,255);
+     border-radius: 23px;
+     background-color: rgb(0,0,0,0);
+   }
+   input{
+     padding:2px;
+     background-color: rgb(0,0,0,0);
+     border:none;
+   }
+  </style>
+ </head>
+ <body>
+ 
+  <svg ontouchstart="ts(event), tm(event)"
+       ontouchmove="tm(event)" id='ink'> </svg>
+        <div id="inp">
+        Control panel <br>
+        <label>Stroke: </label>
+ <input type='color' id="stroke">
+ <label>Fill: </label>
+  <input type='color' id="fill" onchange="fill()"></div>
+  <label>Background: </label>
+  <input type='color' id="bg" onchange="bgfill()"></div>
+  <label>Width: </label>
+  <input type='range' max="20" value="2" id="width">
+  </div>
+  <button onclick='clearBoard()'>Clear</button>
+  <button onclick="openFullscreen();">Open Video in Fullscreen Mode</button>
+  <textarea id="code" disabled></textarea>
+  <script>
+  document.querySelector('#fill').value = '#fffff'
+   var x , y , dval;
+   
+   function ts(e){
+   dval ="";
+   var svg = document.getElementsByTagName('svg')[0];
+   var ink = document.createElementNS("http://www.w3.org/2000/svg","path");
+   ink.style.strokeWidth = document.querySelector('#width').value + 'px';
+   ink.style.stroke = document.querySelector('#stroke').value;
+   ink.style.fill = "rgb(0,0,0,0)";
+   svg.appendChild(ink);
+    x = e.touches[0].clientX;
+    y = e.touches[0].clientY;
+    dval+=" M"+x+" "+y+"L";
+   }
+   
+   function tm(e){
+   
+   var path = document.getElementsByTagName('path');
+   var ink = path[path.length - 1];
+    mx = e.touches[0].clientX;
+    my = e.touches[0].clientY;
+    dval+=mx+" "+my+" ";
+    ink.setAttribute("d",dval);
+    e.preventDefault();
+    getCodee(event);
+   }
+  function clearBoard(){
+     document.getElementById('code').value = "";
+     document.getElementsByTagName('svg')[0].innerHTML = '';
+     console.log("cleard!")
+     document.getElementsByTagName('svg')[0].style.backgroundColor = 'rgb(0,0,0,0)';
+  }
+  function fill(){
+    var path = document.getElementsByTagName('path');
+   var ink = path[path.length - 1];
+   ink.style.fill = document.querySelector('#fill').value;
+  }
+  function getCodee(e){
+    var path = document.getElementsByTagName('path');
+   var svg = path[path.length - 1];
+     var code = document.getElementById('code');
+     code.value = e.target.innerHTML;
+     code.scrollTop = code.scrollHeight;
+  }
+  function bgfill(e){
+    
+   document.getElementsByTagName('svg')[0].style.backgroundColor = document.querySelector('#bg').value;
+  }
+  var elem = document.getElementsByTagName('svg')[0];
+
+/* When the openFullscreen() function is executed, open the video in fullscreen.
+Note that we must include prefixes for different browsers, as they don't support the requestFullscreen method yet */
+function openFullscreen() {
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) { /* Safari */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { /* IE11 */
+    elem.msRequestFullscreen();
+  }
+}
+  </script>
+ </body>
+</html>
