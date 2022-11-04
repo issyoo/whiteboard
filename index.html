@@ -167,23 +167,13 @@ function openFullscreen() {
   }
 }
 function copyCode(){
- /* var copyText = document.getElementById("code");
+  var copyText = document.getElementById("code").value;
 
-  // Select the text field
-  copyText.select();
-  //copyText.setSelectionRange(0, 99999); // For mobile devices
-
-  // Copy the text inside the text field
-  navigator.clipboard.writeText(copyText.value);
-  
-  // Alert the copied text
-  alert("Copied the text");*/
-  
-  navigator.clipboard.writeText("Clipboard API Test").then(
+  navigator.clipboard.writeText(copyText).then(
     v => alert("Success"),
     e => alert("Fail\n" + e));
     
-  NativeAndroid.copyToClipboard("Clipboard API Test");
+  NativeAndroid.copyToClipboard(copyText);
 }
  function moreOp(event){
    event.stopPropagation();
